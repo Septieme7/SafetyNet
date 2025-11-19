@@ -1,6 +1,6 @@
 package com.safetynet.alert.controler;
 import com.safetynet.alert.model.Firestation;
-import com.safetynet.alert.service.dto.FireStationService;
+import com.safetynet.alert.service.FireStationService;
 import org.springframework.web.bind.annotation.*;
 
 //TESTS

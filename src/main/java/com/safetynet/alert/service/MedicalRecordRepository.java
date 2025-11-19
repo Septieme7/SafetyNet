@@ -1,4 +1,4 @@
-package com.safetynet.alert.service.dto;
+package com.safetynet.alert.service;
 
 public class MedicalRecordRepository {
 

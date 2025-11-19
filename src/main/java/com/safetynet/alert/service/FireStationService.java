@@ -1,4 +1,4 @@
-package com.safetynet.alert.service.dto;
+package com.safetynet.alert.service;
 
 import com.safetynet.alert.model.Firestation;
 import com.safetynet.alert.repository.FireStationRepository;
