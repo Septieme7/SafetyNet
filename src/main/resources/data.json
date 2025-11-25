@@ -199,6 +199,15 @@
             "phone": "841-874-6741",
             "email": "clivfd@ymail.com"
         },
+      {
+        "firstName": "Ben",
+        "lastName": "Sept",
+        "address": "777 Rue de la République",
+        "city": "Port St Louis Du Rhône",
+        "zip": "13230",
+        "phone": "07 77 77 77 77 pas les Weeks Ends MERCI",
+        "email": "Septieme@Sept.org"
+      },
         {
             "firstName": "Eric",
             "lastName": "Cadigan",
@@ -214,6 +223,10 @@
             "address": "1509 Culver St",
             "station": "3"
         },
+      {
+          "address": "777 Rue de la République",
+          "station": "7"
+      },
         {
             "address": "29 15th St",
             "station": "2"
@@ -465,6 +478,13 @@
             "medications": [],
             "allergies": []
         },
+      {
+        "firstName": "Ben",
+        "lastName": "Sept",
+        "birthdate": "07/07/1977",
+        "medications": [],
+        "allergies": ["Un dieu n'a pas d'allergies"]
+      },
         {
             "firstName": "Eric",
             "lastName": "Cadigan",

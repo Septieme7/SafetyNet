@@ -1,9 +1,8 @@
 package com.safetynet.alert.repository;
 
 import com.safetynet.alert.model.Person;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Component
@@ -15,8 +14,9 @@ public class PersonRepository {
     this.dataHandler = dataHandler;
   }
 
-  public List<Person> findAll() {
+  public List<Person> getAllPersons () {
     return dataHandler.getData().getPersons();
   }
+
 
 }

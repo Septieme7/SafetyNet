@@ -11,7 +11,7 @@ public class Firestation {
     this.address = address;
     this.station = station;
   }
-
+// GET et SET
   public String getAddress() { return address;}
   public void setAddress(String address) { this.address = address; }
 
