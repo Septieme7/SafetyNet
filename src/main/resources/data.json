@@ -200,8 +200,8 @@
             "email": "clivfd@ymail.com"
         },
       {
-        "firstName": "Ben",
-        "lastName": "Sept",
+        "firstName": "Ben\uD83E\uDD87",
+        "lastName": "Sept\uD83E\uDD87",
         "address": "777 Rue de la République",
         "city": "Port St Louis Du Rhône",
         "zip": "13230",
@@ -479,8 +479,8 @@
             "allergies": []
         },
       {
-        "firstName": "Ben",
-        "lastName": "Sept",
+        "firstName": "Ben\uD83E\uDD87",
+        "lastName": "Sept\uD83E\uDD87",
         "birthdate": "07/07/1977",
         "medications": [],
         "allergies": ["Un dieu n'a pas d'allergies"]
