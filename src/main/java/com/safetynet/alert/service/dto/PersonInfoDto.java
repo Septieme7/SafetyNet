@@ -15,8 +15,8 @@ public class PersonInfoDto {
   private String phone;          // Téléphone
   private int age;               // Âge calculé (en années)
   private String email;          // Adresse email
-  private String[] medications;  // Liste des médicaments
-  private String[] allergies;    // Liste des allergies
+  private String[] medications;  // Liste des médicaments //NORMALEMENT C une list
+  private String[] allergies;    // Liste des allergies //NORMALEMENT C une list
 
   // === CONSTRUCTEURS ===
 
