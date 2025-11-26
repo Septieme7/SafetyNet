@@ -10,17 +10,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Gestionnaire principal des données - Charge le fichier JSON
+ */
 @Component
 public class DataHandler {
-
   private final Data data;
 
   public DataHandler() throws IOException {
     String temp = getFromRessource("data.json");
     this.data = JsonIterator.deserialize(temp, Data.class);
   }
-  private String getFromRessource(String s) throws IOException, IOException {
-    InputStream is = new ClassPathResource (s).getInputStream();
+
+  private String getFromRessource(String s) throws IOException {
+    InputStream is = new ClassPathResource(s).getInputStream();
     return IOUtils.toString(is, StandardCharsets.UTF_8);
   }
 

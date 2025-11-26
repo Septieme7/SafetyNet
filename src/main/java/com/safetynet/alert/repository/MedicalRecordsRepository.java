@@ -5,17 +5,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Repository pour l'accès aux dossiers médicaux
+ */
 @Component
 public class MedicalRecordsRepository {
-
   private final DataHandler dataHandler;
 
-  public MedicalRecordsRepository (DataHandler dataHandler) {
+  public MedicalRecordsRepository(DataHandler dataHandler) {
     this.dataHandler = dataHandler;
   }
 
   public List<Medicalrecord> getAllMedicalrecords() {
     return dataHandler.getData().getMedicalrecords();
   }
-
 }

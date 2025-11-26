@@ -6,21 +6,16 @@ import com.safetynet.alert.model.Person;
 import com.safetynet.alert.repository.FireStationRepository;
 import com.safetynet.alert.repository.MedicalRecordsRepository;
 import com.safetynet.alert.repository.PersonRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service principal pour les alertes et rapports
+ */
 @Service
 public class AlertService {
-
-  private static final Logger logger = LoggerFactory.getLogger(AlertService.class);
-
   private final PersonRepository personRepository;
   private final FireStationRepository fireStationRepository;
   private final MedicalRecordsRepository medicalRecordsRepository;
@@ -36,8 +31,11 @@ public class AlertService {
     this.medicalRecordsService = medicalRecordsService;
   }
 
+  /**
+   * Récupère les informations pour un incendie à une adresse
+   */
   public Map<String, Object> getFireInfo(String address) {
-    logger.info("Récupération des informations feu pour l'adresse: {}", address);
+    System.out.println("🔥 INFOS FEU POUR: " + address);
 
     Map<String, Object> result = new HashMap<>();
 
@@ -55,37 +53,40 @@ public class AlertService {
             .filter(p -> p.getAddress().equalsIgnoreCase(address))
             .collect(Collectors.toList());
 
+    // Construire les informations détaillées
     List<Map<String, Object>> personsInfo = persons.stream().map(person -> {
       Map<String, Object> personInfo = new HashMap<>();
       personInfo.put("firstName", person.getFirstName());
       personInfo.put("lastName", person.getLastName());
       personInfo.put("phone", person.getPhone());
 
-      // Calculer l'âge et récupérer les infos médicales
+      // Ajouter les informations médicales
       Medicalrecord medicalRecord = findMedicalRecord(person.getFirstName(), person.getLastName());
       if (medicalRecord != null) {
         personInfo.put("age", medicalRecordsService.calculateAgeFromMedicalRecord(
                 person.getFirstName(), person.getLastName()));
-        personInfo.put("medications",
-                medicalRecord.getMedications() != null ? medicalRecord.getMedications() : new String[0]);
-        personInfo.put("allergies",
-                medicalRecord.getAllergies() != null ? medicalRecord.getAllergies() : new String[0]);
+        personInfo.put("medications", medicalRecord.getMedications() != null ?
+                medicalRecord.getMedications() : new String[0]);
+        personInfo.put("allergies", medicalRecord.getAllergies() != null ?
+                medicalRecord.getAllergies() : new String[0]);
       } else {
         personInfo.put("age", 0);
         personInfo.put("medications", new String[0]);
         personInfo.put("allergies", new String[0]);
       }
-
       return personInfo;
     }).collect(Collectors.toList());
 
     result.put("persons", personsInfo);
-    logger.info("Informations feu récupérées: {} personnes trouvées", personsInfo.size());
+    System.out.println("✅ " + personsInfo.size() + " PERSONNE(S) TROUVÉE(S)");
     return result;
   }
 
+  /**
+   * Récupère les informations pour plusieurs stations (inondation)
+   */
   public Map<String, Object> getFloodStations(List<String> stations) {
-    logger.info("Récupération des informations flood pour les stations: {}", stations);
+    System.out.println("🌊 STATIONS FLOOD: " + stations);
 
     Map<String, Object> result = new HashMap<>();
 
@@ -98,6 +99,7 @@ public class AlertService {
 
       Map<String, List<Map<String, Object>>> stationInfo = new HashMap<>();
 
+      // Pour chaque adresse, récupérer les personnes
       for (String address : addresses) {
         List<Map<String, Object>> personsAtAddress = personRepository.getAllPersons().stream()
                 .filter(p -> p.getAddress().equalsIgnoreCase(address))
@@ -111,16 +113,15 @@ public class AlertService {
                   if (medicalRecord != null) {
                     personInfo.put("age", medicalRecordsService.calculateAgeFromMedicalRecord(
                             person.getFirstName(), person.getLastName()));
-                    personInfo.put("medications",
-                            medicalRecord.getMedications() != null ? medicalRecord.getMedications() : new String[0]);
-                    personInfo.put("allergies",
-                            medicalRecord.getAllergies() != null ? medicalRecord.getAllergies() : new String[0]);
+                    personInfo.put("medications", medicalRecord.getMedications() != null ?
+                            medicalRecord.getMedications() : new String[0]);
+                    personInfo.put("allergies", medicalRecord.getAllergies() != null ?
+                            medicalRecord.getAllergies() : new String[0]);
                   } else {
                     personInfo.put("age", 0);
                     personInfo.put("medications", new String[0]);
                     personInfo.put("allergies", new String[0]);
                   }
-
                   return personInfo;
                 })
                 .collect(Collectors.toList());
@@ -135,26 +136,30 @@ public class AlertService {
       }
     }
 
-    logger.info("Informations flood récupérées pour {} stations", result.size());
+    System.out.println("✅ DONNÉES FLOOD RÉCUPÉRÉES");
     return result;
   }
 
+  /**
+   * Récupère la couverture d'une station de pompiers
+   */
   public Map<String, Object> getFireStationCoverage(String stationNumber) {
-    logger.info("Récupération de la couverture de la station: {}", stationNumber);
+    System.out.println("🏠 COUVERTURE STATION: " + stationNumber);
 
     Map<String, Object> result = new HashMap<>();
 
-    // Trouver les adresses couvertes par cette station
+    // Adresses couvertes par la station
     List<String> addresses = fireStationRepository.findAllFireStations().stream()
             .filter(fs -> fs.getStation().equals(stationNumber))
             .map(Firestation::getAddress)
             .collect(Collectors.toList());
 
-    // Compter adultes et enfants
+    // Personnes couvertes
     List<Person> allPersons = personRepository.getAllPersons().stream()
             .filter(p -> addresses.contains(p.getAddress()))
             .collect(Collectors.toList());
 
+    // Compter adultes et enfants
     long adults = allPersons.stream()
             .filter(person -> {
               int age = medicalRecordsService.calculateAgeFromMedicalRecord(
@@ -171,7 +176,7 @@ public class AlertService {
             })
             .count();
 
-    // Préparer les informations des personnes
+    // Informations des personnes
     List<Map<String, String>> personsInfo = allPersons.stream()
             .map(person -> {
               Map<String, String> info = new HashMap<>();
@@ -188,15 +193,16 @@ public class AlertService {
     result.put("children", children);
     result.put("persons", personsInfo);
 
-    logger.info("Couverture station {}: {} adultes, {} enfants, {} personnes",
-            stationNumber, adults, children, personsInfo.size());
+    System.out.println("✅ " + adults + " ADULTE(S), " + children + " ENFANT(S)");
     return result;
   }
 
+  /**
+   * Trouve un dossier médical par nom
+   */
   private Medicalrecord findMedicalRecord(String firstName, String lastName) {
     return medicalRecordsRepository.getAllMedicalrecords().stream()
-            .filter(mr -> mr.getFirstName().equals(firstName)
-                    && mr.getLastName().equals(lastName))
+            .filter(mr -> mr.getFirstName().equals(firstName) && mr.getLastName().equals(lastName))
             .findFirst()
             .orElse(null);
   }
